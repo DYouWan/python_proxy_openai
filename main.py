@@ -1,16 +1,24 @@
 from flask import Flask, request
 import requests
+import logging
 import os
 
 app = Flask(__name__)
 
 OPENAI_API_HOST = "api.openai.com"
 
+# 配置日志记录
+logging.basicConfig(filename='app.log', level=logging.INFO)
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def proxy(path):
-    if path.startswith('v1'):
+
+    # 记录请求的日志
+    app.logger.info(f"请求地址：{request.url}")
+
+    if path.startswith('/v1'):
         url = f"https://{OPENAI_API_HOST}/{path}"
         headers = request.headers
         data = request.get_data()
