@@ -28,7 +28,16 @@ def proxy(path):
         app.logger.info("请求OpenAi数据格式: ", data)
         rsp = requests.request(request.method, url, headers=headers, data=data)
         app.logger.info("OpenAi返回的数据格式: ", rsp.content)
-        return rsp.content.decode('utf-8')
+
+        # 创建 Flask 响应对象
+        flask_response = Response(rsp.content)
+        app.logger.info("Flask响应对象: ", flask_response)
+
+        # 复制原始响应的头信息到 Flask 响应对象
+        for header, value in rsp.headers.items():
+            flask_response.headers[header] = value
+
+        return flask_response
 
 
 if __name__ == '__main__':
