@@ -26,7 +26,7 @@ def proxy(path):
             key, value) in request.headers.items() if key != 'Host'}
 
         data = request.get_data()
-        return requests.request(request.method, url, headers=headers, data=data, allow_redirects=False).content
+        return requests.request(request.method, url, headers=headers, data=data).content
         
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
