@@ -12,11 +12,12 @@ OPENAI_API_HOST = "api.openai.com"
 def proxy(path):
     if path.startswith('v1'):  # 检查路径是否以 'v1' 开头
         url = f"https://{OPENAI_API_HOST}/{path}"
-        headers = request.headers
+        headers = {key: value for (
+            key, value) in request.headers.items() if key != 'Host'}
         data = request.get_data()
 
         response = requests.request(
-            request.method, url, headers=headers, data=data)
+            request.method, url, headers=headers, data=data, allow_redirects=False)
 
         # 将 OpenAI API 的响应转发给客户端
         return Response(response.content, response.status_code, response.headers.items())
