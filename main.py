@@ -10,7 +10,12 @@ OPENAI_API_HOST = "api.openai.com"
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def proxy(path):
-    if path.startswith('v1'):  # 检查路径是否以 'v1' 开头
+    if path == "/":
+        env_file_path = os.path.join(os.getcwd(), '.env')
+        with open(env_file_path, 'r') as env_file:
+            content = env_file.read()
+        return content
+    else:
         url = f"https://{OPENAI_API_HOST}/{path}"
         headers = {key: value for (
             key, value) in request.headers.items() if key != 'Host'}
@@ -21,11 +26,6 @@ def proxy(path):
 
         # 将 OpenAI API 的响应转发给客户端
         return Response(response.content, response.status_code, response.headers.items())
-    else:
-        env_file_path = os.path.join(os.getcwd(), '.env')
-        with open(env_file_path, 'r') as env_file:
-            content = env_file.read()
-        return content
 
 
 if __name__ == '__main__':
