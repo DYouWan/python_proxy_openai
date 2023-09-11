@@ -33,10 +33,6 @@ def proxy(path):
         flask_response = Response(rsp.content)
         app.logger.info("Flask响应对象: ", flask_response)
 
-        # 复制原始响应的头信息到 Flask 响应对象
-        for header, value in rsp.headers.items():
-            flask_response.headers[header] = value
-
         return flask_response
 
 
