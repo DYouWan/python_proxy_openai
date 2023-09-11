@@ -1,8 +1,7 @@
-from flask import Flask, request, Response
-import requests
 import os
-import gzip
 import logging
+import requests
+from flask import Flask, request, Response
 
 app = Flask(__name__)
 
@@ -27,18 +26,8 @@ def proxy(path):
 
         data = request.get_data()
         app.logger.info(data)
-        response = requests.request(
-            request.method, url, headers=headers, data=data)
+        return requests.request(request.method, url, headers=headers, data=data).content
 
-        # 将原始的响应对象转换为 Flask 响应对象
-        flask_response = Response(response.content, status=response.status_code,
-                                  content_type=response.headers['Content-Type'])
 
-        # 将原始响应中的头信息复制到 Flask 响应中
-        for header, value in response.headers.items():
-            flask_response.headers[header] = value
-
-        return flask_response
-        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
