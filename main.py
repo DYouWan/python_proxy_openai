@@ -26,7 +26,10 @@ def proxy(path):
 
         data = request.get_data()
         app.logger.info(data)
-        return requests.request(request.method, url, headers=headers, data=data).content
+        rsp = requests.request(request.method, url, headers=headers, data=data)
+        app.logger.info(rsp)
+        app.logger.info(rsp.content)
+        return rsp.content
 
 
 if __name__ == '__main__':
