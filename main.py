@@ -12,6 +12,9 @@ def proxy(path):
     url = f"https://{OPENAI_API_HOST}/{path}"
     headers = request.headers
     data = request.get_data()
+
+    print(f"Request URL: {url}")
+    
     response = requests.request(
         request.method, url, headers=headers, data=data)
     return response.content, response.status_code, response.headers.items()
