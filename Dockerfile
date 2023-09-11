@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir flask requests gunicorn
 EXPOSE 5000
 
 # 运行应用
-CMD ["gunicorn", "main:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
