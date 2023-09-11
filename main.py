@@ -25,9 +25,9 @@ def proxy(path):
             key, value) in request.headers.items() if key != 'Host'}
 
         data = request.get_data()
-        app.logger.info("请求OpenAi数据格式: ", data)
+        app.logger.info("请求数据格式: ", data)
         rsp = requests.request(request.method, url, headers=headers, data=data)
-        app.logger.info("OpenAi返回的数据格式: ", rsp.content)
+        app.logger.info("返回的数据格式: ", rsp.content)
         return rsp.content
 
 
