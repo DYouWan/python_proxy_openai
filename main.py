@@ -31,15 +31,14 @@ def proxy(path):
         )
 
         app.logger.info(response.headers.get("Content-Encoding"))
-        app.logger.info(response.content[:100])
+        app.logger.info(response.content)
 
-        # 检查响应是否使用了 gzip 压缩编码
-        if response.headers.get("Content-Encoding") == "gzip":
-            # 解压缩 gzip 数据
-            compressed_data = response.content
-            uncompressed_data = gzip.decompress(compressed_data)
+        # 检查响应的内容类型是否为 JSON
+        if response.headers.get("Content-Type") == "application/json":
+            # 使用原始数据
+            uncompressed_data = response.content
         else:
-            # 如果未使用 gzip 压缩，则使用原始数据
+            # 其他情况（如 gzip 压缩），使用原始数据或进行相应处理
             uncompressed_data = response.content
 
         # 将 OpenAI API 的响应转发给客户端
