@@ -22,8 +22,13 @@
 from langchain.llms import OpenAI
 
 llm = OpenAI(
-    openai_api_base="[填入刚才生成的自定义域名](https://xxxxx.railway.app/v1)",  #后面要带v1
-    openai_api_key="填入自己的Key"
+
+  openai_api_base="https://xxxxx.railway.app/v1",  #生成的域名是不带v1的，实际请求时后面要带v1
+  
+  openai_api_key="填入自己的Key"
+  
 )
+
 result = llm("给我讲个笑话")
+
 print(result)
