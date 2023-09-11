@@ -1,31 +1,25 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import requests
-import logging
 import os
 
 app = Flask(__name__)
 
 OPENAI_API_HOST = "api.openai.com"
 
-# 配置日志记录
-logging.basicConfig(filename='app.log', level=logging.INFO)
-
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def proxy(path):
-
-    # 记录请求的日志
-    app.logger.info(f"请求地址：{request.url}")
-
-    if path.startswith('/v1'):
+    if path.startswith('v1'):  # 检查路径是否以 'v1' 开头
         url = f"https://{OPENAI_API_HOST}/{path}"
         headers = request.headers
         data = request.get_data()
 
         response = requests.request(
             request.method, url, headers=headers, data=data)
-        return response.content, response.status_code, response.headers.items()
+
+        # 将 OpenAI API 的响应转发给客户端
+        return Response(response.content, response.status_code, response.headers.items())
     else:
         env_file_path = os.path.join(os.getcwd(), '.env')
         with open(env_file_path, 'r') as env_file:
