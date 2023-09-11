@@ -39,12 +39,6 @@ def proxy(path):
 
         return flask_response
 
-        # 创建 Flask 响应对象
-        flask_response = Response(rsp.content)
-        app.logger.info("Flask响应对象: ", flask_response)
-
-        return flask_response
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
