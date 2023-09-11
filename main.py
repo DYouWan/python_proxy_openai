@@ -25,11 +25,10 @@ def proxy(path):
             key, value) in request.headers.items() if key != 'Host'}
 
         data = request.get_data()
-        app.logger.info(data)
+        app.logger.info("请求OpenAi数据格式: ", data)
         rsp = requests.request(request.method, url, headers=headers, data=data)
-        app.logger.info(rsp)
-        app.logger.info(rsp.content)
-        return rsp.content
+        app.logger.info("OpenAi返回的数据格式: ", rsp.content)
+        return rsp.content.decode('utf-8')
 
 
 if __name__ == '__main__':
