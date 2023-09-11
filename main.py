@@ -26,6 +26,9 @@ def proxy(path):
             request.method, url, headers=headers, data=data, allow_redirects=False
         )
 
+        print(response.headers.get("Content-Encoding"))
+        print(response.content[:100])  # 打印前100个字节的内容
+
         # 检查响应是否使用了 gzip 压缩编码
         if response.headers.get("Content-Encoding") == "gzip":
             # 解压缩 gzip 数据
