@@ -2,8 +2,12 @@ from flask import Flask, request, Response
 import requests
 import os
 import gzip
+import logging
 
 app = Flask(__name__)
+
+# 配置日志记录器
+logging.basicConfig(level=logging.INFO)  # 设置日志记录级别为 INFO
 
 OPENAI_API_HOST = "api.openai.com"
 
@@ -26,8 +30,8 @@ def proxy(path):
             request.method, url, headers=headers, data=data, allow_redirects=False
         )
 
-        print(response.headers.get("Content-Encoding"))
-        print(response.content[:100])  # 打印前100个字节的内容
+        app.logger.info(response.headers.get("Content-Encoding"))
+        app.logger.info(response.content[:100])
 
         # 检查响应是否使用了 gzip 压缩编码
         if response.headers.get("Content-Encoding") == "gzip":
