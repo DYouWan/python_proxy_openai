@@ -10,7 +10,7 @@ OPENAI_API_HOST = "api.openai.com"
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def proxy(path):
-    if path == "/":
+    if path == "":
         env_file_path = os.path.join(os.getcwd(), '.env')
         with open(env_file_path, 'r') as env_file:
             content = env_file.read()
