@@ -7,8 +7,8 @@ app = Flask(__name__)
 OPENAI_API_HOST = "api.openai.com"
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
     if path == "/":
         env_file_path = os.path.join(os.getcwd(), '.env')
