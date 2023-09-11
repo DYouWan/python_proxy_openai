@@ -10,8 +10,5 @@ COPY . /app
 # 安装依赖
 RUN pip install --no-cache-dir flask requests gunicorn
 
-# 暴露端口
-EXPOSE 5000
-
 # 运行应用
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "main:app"]
