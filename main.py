@@ -26,6 +26,7 @@ def proxy(path):
             key, value) in request.headers.items() if key != 'Host'}
 
         data = request.get_data()
+        app.logger.info(data)
         return requests.request(request.method, url, headers=headers, data=data).content
         
 if __name__ == '__main__':
