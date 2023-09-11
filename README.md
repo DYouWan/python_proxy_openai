@@ -1,4 +1,4 @@
-# 基于Python实现的OpenAi反代
+# 基于Python实现的OpenAi反代 LangChain
 
 ###  1.使用 Railway 部署
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app?referralCode=3IMB0X)
