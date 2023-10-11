@@ -12,9 +12,6 @@ def proxy(path):
     if path == "":
         return proxy_default()
 
-    app.logger.info("123")
-    app.logger.info(path)
-
     first_slash_index = path.index('/', 0)  # 找到从索引 8 开始的第一个斜杠
     path_header = str[:first_slash_index]
     path_route = str[first_slash_index+1:]
@@ -27,8 +24,10 @@ def proxy(path):
         return proxy_default()
 
 
-def proxy_openai(path) -> bytes:
-    url = f"https://api.openai.com/v1/{path}"
+def proxy_openai(args) -> bytes:
+    app.logger.info(args)
+    url = f"https://api.openai.com/v1/{args}"
+    app.logger.info(url)
     headers = {key: value for (
         key, value) in request.headers.items() if key != 'Host'}
 
