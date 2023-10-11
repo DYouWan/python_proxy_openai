@@ -13,8 +13,8 @@ def proxy(path):
         return proxy_default()
 
     first_slash_index = path.index('/', 0)  # 找到从索引 8 开始的第一个斜杠
-    path_header = str[:first_slash_index]
-    path_route = str[first_slash_index+1:]
+    path_header = path[:first_slash_index]
+    path_route = path[first_slash_index+1:]
 
     if path_header == "p1":
         return proxy_openai(path_route)
