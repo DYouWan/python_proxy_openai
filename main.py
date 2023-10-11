@@ -17,10 +17,10 @@ def proxy(path):
     path_header = str[:first_slash_index]
     path_route = str[first_slash_index+1:]
     app.logger.info(path_route)
+
     if path_header == "p1":
         return proxy_openai(path_route)
-
-    elif path.startswith('/openai'):
+    elif path_header == "p2":
         return proxy_openai(path[7:])
     else:
         return proxy_default()
