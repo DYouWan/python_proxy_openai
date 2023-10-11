@@ -12,29 +12,38 @@ def proxy(path):
     if path == "":
         return proxy_default()
 
-    first_slash_index = path.index('/', 0)  # 找到从索引 8 开始的第一个斜杠
+    first_slash_index = path.index('/', 0) 
     path_header = path[:first_slash_index]
     path_route = path[first_slash_index+1:]
 
     if path_header == "p1":
         return proxy_openai(path_route)
     elif path_header == "p2":
-        return proxy_openai(path[7:])
+        return proxy_wikipedia(path_route)
     else:
         return proxy_default()
 
 
 def proxy_openai(args) -> bytes:
-    app.logger.info(args)
     url = f"https://api.openai.com/v1/{args}"
+    headers = {key: value for (
+        key, value) in request.headers.items() if key != 'Host'}
+
+    data = request.get_data()
+    app.logger.info(data)
+    rsp = requests.request(request.method, url, headers=headers, data=data)
+    app.logger.info(rsp.content)
+    return rsp.content
+
+
+def proxy_wikipedia(args) -> bytes:
+    url = f"https://en.wikipedia.org{args}"
     app.logger.info(url)
     headers = {key: value for (
         key, value) in request.headers.items() if key != 'Host'}
 
     data = request.get_data()
-    # app.logger.info(data)
     rsp = requests.request(request.method, url, headers=headers, data=data)
-    # app.logger.info(rsp.content)
     return rsp.content
 
 
