@@ -14,6 +14,7 @@ OPENAI_API_HOST = "api.openai.com"
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
+    app.logger.info(path)
     if path == "":
         env_file_path = os.path.join(os.getcwd(), '.env')
         with open(env_file_path, 'r') as env_file:
@@ -25,9 +26,9 @@ def proxy(path):
             key, value) in request.headers.items() if key != 'Host'}
 
         data = request.get_data()
-        app.logger.info(data)
+        # app.logger.info(data)
         rsp = requests.request(request.method, url, headers=headers, data=data)
-        app.logger.info(rsp.content)
+        # app.logger.info(rsp.content)
         return rsp.content
 
 
