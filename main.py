@@ -5,32 +5,48 @@ from flask import Flask, request, Response
 
 app = Flask(__name__)
 
-# 配置日志记录器
-logging.basicConfig(level=logging.INFO)  # 设置日志记录级别为 INFO
-
-OPENAI_API_HOST = "api.openai.com"
-
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
-    app.logger.info(path)
     if path == "":
-        env_file_path = os.path.join(os.getcwd(), '.env')
-        with open(env_file_path, 'r') as env_file:
-            content = env_file.read()
-        return Response(content, mimetype='text/plain')
+        return proxy_default()
+
+    app.logger.info(path)
+    first_slash_index = path.index('/', 0)  # 找到从索引 8 开始的第一个斜杠
+    path_header = str[:first_slash_index]
+    path_route = str[first_slash_index+1:]
+    app.logger.info(path_route)
+    if path_header == "p1":
+        return proxy_openai(path_route)
+
+    elif path.startswith('/openai'):
+        return proxy_openai(path[7:])
     else:
-        url = f"https://{OPENAI_API_HOST}/{path}"
-        headers = {key: value for (
-            key, value) in request.headers.items() if key != 'Host'}
+        return proxy_default()
 
-        data = request.get_data()
-        # app.logger.info(data)
-        rsp = requests.request(request.method, url, headers=headers, data=data)
-        # app.logger.info(rsp.content)
-        return rsp.content
 
+def proxy_openai(path) -> bytes:
+    OPENAI_API_HOST = "api.openai.com"
+    url = f"https://{OPENAI_API_HOST}/{path}"
+    headers = {key: value for (
+        key, value) in request.headers.items() if key != 'Host'}
+
+    data = request.get_data()
+    # app.logger.info(data)
+    rsp = requests.request(request.method, url, headers=headers, data=data)
+    # app.logger.info(rsp.content)
+    return rsp.content
+
+
+def proxy_default() -> Response:
+    env_file_path = os.path.join(os.getcwd(), '.env')
+    with open(env_file_path, 'r') as env_file:
+        content = env_file.read()
+    return Response(content, mimetype='text/plain')
+
+
+logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
