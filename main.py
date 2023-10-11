@@ -12,11 +12,12 @@ def proxy(path):
     if path == "":
         return proxy_default()
 
+    app.logger.info("123")
     app.logger.info(path)
+
     first_slash_index = path.index('/', 0)  # 找到从索引 8 开始的第一个斜杠
     path_header = str[:first_slash_index]
     path_route = str[first_slash_index+1:]
-    app.logger.info(path_route)
 
     if path_header == "p1":
         return proxy_openai(path_route)
