@@ -27,8 +27,7 @@ def proxy(path):
 
 
 def proxy_openai(path) -> bytes:
-    OPENAI_API_HOST = "api.openai.com"
-    url = f"https://{OPENAI_API_HOST}/{path}"
+    url = f"https://api.openai.com/v1/{path}"
     headers = {key: value for (
         key, value) in request.headers.items() if key != 'Host'}
 
