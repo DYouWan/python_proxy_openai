@@ -11,21 +11,12 @@ app = Flask(__name__)
 def proxy(path):
     if path == "":
         return proxy_default()
-
-    first_slash_index = path.index('/', 0) 
-    path_header = path[:first_slash_index]
-    path_route = path[first_slash_index+1:]
-
-    if path_header == "p1":
-        return proxy_openai(path_route)
-    elif path_header == "p2":
-        return proxy_wikipedia(path_route)
     else:
-        return proxy_default()
+        return proxy_openai(path)
 
 
-def proxy_openai(args) -> bytes:
-    url = f"https://api.openai.com/v1/{args}"
+def proxy_openai(path) -> bytes:
+    url = f"https://api.openai.com/{path}"
     headers = {key: value for (
         key, value) in request.headers.items() if key != 'Host'}
 
@@ -33,17 +24,6 @@ def proxy_openai(args) -> bytes:
     app.logger.info(data)
     rsp = requests.request(request.method, url, headers=headers, data=data)
     app.logger.info(rsp.content)
-    return rsp.content
-
-
-def proxy_wikipedia(args) -> bytes:
-    url = f"https://en.wikipedia.org{args}"
-    app.logger.info(url)
-    headers = {key: value for (
-        key, value) in request.headers.items() if key != 'Host'}
-
-    data = request.get_data()
-    rsp = requests.request(request.method, url, headers=headers, data=data)
     return rsp.content
 
 
