@@ -21,9 +21,9 @@ def proxy_openai(path) -> bytes:
         key, value) in request.headers.items() if key != 'Host'}
 
     data = request.get_data()
-    app.logger.info(data)
+    # app.logger.info(data)
     rsp = requests.request(request.method, url, headers=headers, data=data)
-    app.logger.info(rsp.content)
+    # app.logger.info(rsp.content)
     return rsp.content
 
 
